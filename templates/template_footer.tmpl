@@ -1,0 +1,69 @@
+      </div>
+    </div>
+    <script src="reveal.js/lib/js/head.min.js"></script>
+    <script src="reveal.js/js/reveal.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    
+    <script>
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+          controls: true,
+          progress: true,
+          history: true,
+          center: true,
+      
+          theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+          transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+      
+          // Optional libraries used to extend on reveal.js
+          dependencies: [
+              { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+              { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+              { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+              { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+              // { src: 'reveal.js/plugin/leap/leap.js', async: true }
+              // { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+              // { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+          ]
+      });
+
+    var map = L.map('map').setView([40, -55], 3);
+    L.tileLayer('http://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', { attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>', maxZoom: 18,id: 'examples.map-i86knfo3' }).addTo(map);
+    var LeafIcon = L.Icon.extend({
+			options: {
+				iconSize:     [76, 62],
+				iconAnchor:   [38, 31]
+			}
+		});
+    var LeafIcon1 = L.Icon.extend({
+			options: {
+				iconSize:     [76, 44],
+				iconAnchor:   [38, 22]
+			}
+		});
+    var LeafIcon2 = L.Icon.extend({
+			options: {
+				iconSize:     [96, 44],
+				iconAnchor:   [48, 22]
+			}
+		});
+    var LeafIcon3 = L.Icon.extend({
+			options: {
+				iconSize:     [126, 19],
+				iconAnchor:   [63, 9.5]
+			}
+		});
+    var _2010Icon = new LeafIcon3({iconUrl:'http://foss4g.org/logos/2010long.png'});
+    var _2011Icon = new LeafIcon({iconUrl:'http://foss4g.org/logos/2011_smaller.png'});
+    var _2013Icon = new LeafIcon1({iconUrl: 'http://foss4g.org/logos/2013-smaller.png'});
+    var _2014Icon = new LeafIcon2({iconUrl: 'http://foss4g.org/logos/2014.png'});
+    L.marker([41.394,2.148], {icon: _2010Icon}).addTo(map);
+    L.marker([39.764,-104.855], {icon: _2011Icon}).addTo(map);
+    L.marker([52.954,-1.170], {icon: _2013Icon}).addTo(map);
+    L.marker([45.5424364,-122.654422], {icon: _2014Icon}).addTo(map).bindPopup("<a href='http://2014.foss4g.org/'><img src='http://foss4g.org/logos/2014.png' /></a>");
+</script>
+  </body>
+</html>

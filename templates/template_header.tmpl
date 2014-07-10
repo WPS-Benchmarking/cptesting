@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WPS Benchmarking Session</title>
+<meta name="description" content="WPS Benchmarking Session">
+<meta name="author" content="G&eacute;rald Fenoy">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="reveal.js/css/reveal.min.css">
+<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+<link rel="stylesheet" href="reveal.js/css/theme/osgeo.css" id="theme">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<!-- For syntax highlighting -->
+</head>
+<body>
+<a href="http://osgeo.org" target="_blank" class="osgeo">
+<img src="imgs/osgeo-logo.png" width="150" height="65" />
+</a>
+<div class="reveal">
+  <!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+  
+  <section>
+  <h1>WPS Benchmarking Session</h1>
+  <br/>
+  <p><small>Presented by G&eacute;rald Fenoy / <a href="http://twitter.com/GFenoy">@GFenoy</a></small></p>
+  <p><a href="http://www.foss4g-e.org/">FOSS4G-E 2014 Bremen</a></p>
+  <aside class="notes">
+  <p>This OSGeoLive Lightening Overview, originally compiled by Cameron Shorter is licensed under a Creative Commons Attribution 3.0 License. It is derived from OSGeoLive Project Overviews, which are authored by the numerous OSGeoLive authors as referenced in the credits page at the end of this presentation, and also at <a href="http://live.osgeo.org">http://live.osgeo.org</a>.</p>
+  <p>We have created this presentation in the hope that it will help  increase the awareness and uptake of the breath of quality GeoSpatial Open Source.</p>
+  <p>Please feel free to use these slides, or a subset of these slides, for whatever purposes you see fit, but please credit us authors.</p>
+  <p>The latest version of this presentation and abstract is available at <a href="https://github.com/kalxas/OSGeoLive-presentation">https://github.com/kalxas/OSGeoLive-presentation</a>.</p>
+  <p>These slides make use of the <a href="http://lab.hakim.se/reveal-js/#/">reveal</a> javascript presentation library. Press "s" for Speaker Notes, [ESC] to zoom out, [SPACE] and arrow keys to navigate.</p>
+  </aside>
+  </section>
+  
+  <section>
+  <h2>WPS Benchmarking History</h2>
+  <br />
+  <div id="map"></div>
+  <br />
+  <ul>
+    <li><a href="http://2010.foss4g.org/">Compliance Testing</a>: Theodor Foerster</li>
+    <li><a href="http://2011.foss4g.org/">WPS Shootout</a>: Jody Garnet</li>
+    <li><a href="http://2013.foss4g.org/">WPS Roundup</a>: Jachym Cepicky</li>
+    <li><a href="http://2014.foss4g.org/">WPS Benchmarking</a>: G&eacute;rald Fenoy</li>
+  </ul>
+  </section>
+
+  <section>
+  <h2>Goals and objectives</h2>
+  <br />
+  <ol>
+    <li>Conformance testing</li>
+    <li>Performance testing</li>
+    <li>Interoperability testing</li>
+  </ol>
+  <p>By now, we are foccussed on 1 and 2.</p>
+  <big>It's all about Server !</big>
+  </section>
+
+  
+  <section>
+  <h2>Server available / Limitations</h2>
+  <p>Server specs:</p>
+  <br/>
+  <ul>
+    <li> Processor: Intel Xeon E3 1245v2 (4 cores/ 8 threads) 3.4 GHz+</li>
+    <li> RAM: 32 GB DDR3</li>
+    <li> Disks: 2 x 2 TB SATA (raid hard)</li>
+    <li> Bandwidth: 200 Mbps</li>
+  </ul>
+  <br/>
+  <br/>
+  <big>Server available until April 15 2015 !</big>
+  <br/>
+  <br/>
+  <img src="imgs/banner.png" />
+  <br/>
+  <p>Current limitations:</p>
+  <ul>
+    <li>32 Bits environments</li>
+    <li>Chrooted environments (ressources sharing)</li>
+  </ul>
+  <aside class="notes">
+  <p>Server with the following specifications was setup to host each
+  WPS Server.</p>
+  <p>Server graciously hosted by GeoLabs SARL.</p>
+  <p>We may update the setup to host VM based on OSGeoLive 8.0 for PDX
+  using <a href="http://wiki.libvirt.org/page/Main_Page">libvirt</a>?</p>
+  </aside>
+  </section>
+
+  <section>
+  <h2> WPS Implementations</h2>
+  <br/><br/>
+  <table class="start" style="font-size:30px;text-align: center;">
+    <tr>
+      <td>
+	Project
+      </td>
+      <td>
+	OSGeo
+      </td>
+      <td>
+	Participating
+      </td>
+      <td>
+	Server
+      </td>
+      <td>
+	Buffer
+      </td>
+      <td>
+	Union
+      </td>
+      <td>
+	Intersects
+      </td>
+    </tr>
+    <tr style="text-align: center;">
+      <td>
+	<a href="http://www.zoo-project.org" target='_blank'>ZOO-Project</a>
+      </td>
+      <td>
+	I
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+	<a href="http://37.187.89.64:20070/zoo/?request=GetCapabilities&service=WPS" target='_blank'>X</a>
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+	X
+      </td>
+    </tr>
+    <tr>
+      <td>
+	<a href="http://52north.org/communities/geoprocessing/wps/" target='_blank'>52° North WPS</a>
+      </td>
+      <td>
+	
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+	<a href="http://37.187.89.64:2008/52nWPS/WebProcessingService?request=GetCapabilities&service=WPS" target='_blank'>X</a>
+      </td>
+      <td>
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	<a href="http://geoserver.org/">GeoServer</a>
+      </td>
+      <td>
+	P
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	<a href="http://pywps.wald.intevation.org/">PyWPS</a>
+      </td>
+      <td>
+	<a href="http://wiki.osgeo.org/wiki/OSGeo_Labs:_PyWPS">L</a>
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	<a href="http://constellation.codehaus.org">Constellation</a>
+      </td>
+      <td>
+      </td>
+      <td>
+	X
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	<a href="http://www.deegree.org/">Deegree</a>
+      </td>
+      <td>
+	P
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
+  <pre><code>
+    I: OSGeo Project in Incubation
+    P: OSGeo Project
+    L: OSGeo Labs
+  </code></pre>
+  </section>
+  
+  
