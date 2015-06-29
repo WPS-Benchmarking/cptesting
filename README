@@ -1,3 +1,12 @@
+To use the run.sh script both CPTESTING and GEOSERVER environment variables
+should be defined. CPTESTING define the URL to download the cptesting requests
+and GEOSERVER is the URL of your WFS Server. 
+
+For instance, you may use the following:
+
+export CPTESTING=http://localhost/cptesting/requests/
+export GEOSERVER=http://localhost:8082/geoserver/ows
+
 Please use the following syntaxe:
 
   ./run.sh <WPSInstance> <ServiceNames> <RequestTypes> <Requests> <Concurents>
