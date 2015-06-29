@@ -2,14 +2,25 @@
 <ows:Identifier>ServiceName</ows:Identifier>
 <wps:DataInputs>
 <wps:Input>
-<ows:Identifier>InputName</ows:Identifier>
+<ows:Identifier>InputName1</ows:Identifier>
 <ows:Title>Playground area</ows:Title>
-<wps:Reference xlink:href="GEOSERVER?SERVICE=WFS&amp;REQUEST=GetFeature&amp;VERSION=1.0.0&amp;typename=topp:states&amp;SRS=EPSG:4326&amp;FeatureID=states.15" />
+<wps:Reference xlink:href="GEOSERVER" method="POST">
+<wps:Header key="Content-type" value="text/xml" />
+<wps:BodyReference xlink:href="CPTESTING/body_req.xml" />
+</wps:Reference>
+</wps:Input>
+<wps:Input>
+<ows:Identifier>InputName2</ows:Identifier>
+<ows:Title>Playground area</ows:Title>
+<wps:Reference xlink:href="GEOSERVER" method="POST">
+<wps:Header key="Content-type" value="text/xml" />
+<wps:BodyReference xlink:href="CPTESTING/body_req.xml" />
+</wps:Reference>
 </wps:Input>
 </wps:DataInputs>
 <wps:ResponseForm>
-<wps:ResponseDocument storeExecuteResponse="true" status="true">
-<wps:Output asReference="true">
+<wps:ResponseDocument>
+<wps:Output>
 <ows:Identifier>Result</ows:Identifier>
 </wps:Output>
 </wps:ResponseDocument>

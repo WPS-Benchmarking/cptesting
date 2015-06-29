@@ -15,7 +15,7 @@ For instance to test the Buffer service on a localhost WPS server, using the
 GetCapabilties tests, run performance testing using 5000 requests with 100 
 concurents use the following command:
 
-  ./run.sh http://localhost/cgi-bin/zoo_loader.cgi Buffer GetCapabilities 5000 100
+  ./run.sh http://localhost/cgi-bin/zoo_loader.cgi Buffer GetCapabilities 5000 100 WFSURL
 
 EOF
 )
@@ -29,6 +29,7 @@ WPSInstance=$1
 ServiceName=$2
 NBRequests=$4
 NBConcurrents=$5
+WFSURL=${GEOSERVER}
 
 iter=0
 
@@ -330,9 +331,9 @@ ServiceName=$kk
 #
 # Tests for Execute using POST requests
 #
-for i in ijson_o igml_o ir_o ir_or irb_o irb_or; 
+for i in ijson_o igml_o igmlb64_o ir_o ir_or irb_o irb_or irbr_o irbr_or; 
 do
-    cat ../requests/${i}.xml | sed "s:ServiceName:${ServiceName}:g" > ../tmp/${i}${ii}1.xml
+    cat ../requests/${i}.xml | sed "s:ServiceName:${ServiceName}:g;s|GEOSERVER|${WFSURL}|g;s|CPTESTING|${CPTESTING}|g" > ../tmp/${i}${ii}1.xml
     li=2
     nb=0
     for v in $(cat ../tmp/inputName${ii}.txt); do 
@@ -341,7 +342,7 @@ do
     file=../tmp/${i}${ii}1.xml
     #echo $nb
     if [ $nb -gt 1 ]; then
-    cat ../requests/$(echo $i | sed "s:_:2_:g").xml | sed "s:ServiceName:${ServiceName}:g" > ../tmp/${i}${ii}1.xml
+    cat ../requests/$(echo $i | sed "s:_:2_:g").xml | sed "s:ServiceName:${ServiceName}:g;s|GEOSERVER|${WFSURL}|g;s|CPTESTING|${CPTESTING}|g" > ../tmp/${i}${ii}1.xml
     nbi=1
     for j in $(cat ../tmp/inputName${ii}.txt); do
     	cat $file | sed "s:InputName${nbi}:${j}:g" > ../tmp/${i}${ii}${li}.xml

@@ -4,12 +4,12 @@
 <wps:Input>
 <ows:Identifier>InputName1</ows:Identifier>
 <ows:Title>Playground area</ows:Title>
-<wps:Reference xlink:href="http://37.187.89.64:8082/geoserver/ows?SERVICE=WFS&amp;REQUEST=GetFeature&amp;VERSION=1.0.0&amp;typename=topp:states&amp;SRS=EPSG:4326&amp;FeatureID=states.15" />
+<wps:Reference xlink:href="GEOSERVER?SERVICE=WFS&amp;REQUEST=GetFeature&amp;VERSION=1.0.0&amp;typename=topp:states&amp;SRS=EPSG:4326&amp;FeatureID=states.15" />
 </wps:Input>
 <wps:Input>
 <ows:Identifier>InputName2</ows:Identifier>
 <ows:Title>Playground area</ows:Title>
-<wps:Reference xlink:href="http://37.187.89.64:8082/geoserver/ows?SERVICE=WFS&amp;REQUEST=GetFeature&amp;VERSION=1.0.0&amp;typename=topp:states&amp;SRS=EPSG:4326&amp;FeatureID=states.15" />
+<wps:Reference xlink:href="GEOSERVER?SERVICE=WFS&amp;REQUEST=GetFeature&amp;VERSION=1.0.0&amp;typename=topp:states&amp;SRS=EPSG:4326&amp;FeatureID=states.10" />
 </wps:Input>
 </wps:DataInputs>
 <wps:ResponseForm>
