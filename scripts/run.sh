@@ -150,13 +150,15 @@ function postRequest {
     if [ -z "$5" ]; then
 	echo ""
     else
-	xmllint --noout --schema http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd "$(xsltproc ../xsl/extractStatusLocation.xsl $2)" 2> ../tmp/res${iter}2.txt 
+	tmp=$(echo $2 | sed "s:.xml:2.xml:g")
 	file="$(xsltproc ../xsl/extractStatusLocation.xsl $2)"
+	curl -v -o "$tmp" "$file" 2> ../tmp/temp.log
+	xmllint --noout --schema http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd "$tmp" 2> ../tmp/res${iter}2.txt 
 	isValid="$(cat ../tmp/res${iter}2.txt | grep -v error | grep validates)"
 	if [ "$isValid" != "" ] ; then
 		echo "<li class='v'>"
 		f="$( cat ../tmp/res${iter}.txt | awk {'print $1'})"
-		echo "<a href='$file' target='_blank'>statusLocation</a> validates against <a href='http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd' target='_blank'>wps${3}_response.xsd Schema</a>"
+		echo "<a href='$tmp' target='_blank'>statusLocation</a> validates against <a href='http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd' target='_blank'>wps${3}_response.xsd Schema</a> (final result is <a href='$file' target='_blank'>here</a>)."
 	else
 		echo "<li class='inv'>"
 		cat ../tmp/res${iter}2.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's:\n:<br />:g' > ../tmp/res${iter}2.html
@@ -387,7 +389,7 @@ ServiceName=$kk
 #
 for i in ir_o_async ir_or_async irb_o_async irb_or_async; 
 do
-    cat ../requests/${i}.xml | sed "s:ServiceName:${ServiceName}:g" > ../tmp/${i}${ii}1.xml
+    cat ../requests/${i}.xml | sed "s:ServiceName:${ServiceName}:g;s|GEOSERVER|${WFSURL}|g;s|CPTESTING|${CPTESTING}|g" > ../tmp/${i}${ii}1.xml
     li=2
     nb=0
     for v in $(cat ../tmp/inputName${ii}.txt); do 
@@ -396,7 +398,7 @@ do
     file=../tmp/${i}${ii}1.xml
     #echo $nb
     if [ $nb -gt 1 ]; then
-    cat ../requests/$(echo $i | sed "s:_:2_:").xml | sed "s:ServiceName:${ServiceName}:g" > ../tmp/${i}${ii}1.xml
+    cat ../requests/$(echo $i | sed "s:_:2_:").xml | sed "s:ServiceName:${ServiceName}:g;s|GEOSERVER|${WFSURL}|g;s|CPTESTING|${CPTESTING}|g" > ../tmp/${i}${ii}1.xml
     nbi=1
     for j in $(cat ../tmp/inputName${ii}.txt); do
     	cat $file | sed "s:InputName${nbi}:${j}:g" > ../tmp/${i}${ii}${li}.xml
