@@ -3,7 +3,7 @@
 Usage=$(cat <<EOF
 Please use the following syntaxe:
 
-  ./run.sh <WPSInstance> <ServiceNames> <RequestTypes> <Requests> <Concurents>
+  ./run.sh <WPSInstance> <Version> <ServiceNames> <RequestTypes> <Requests> <Concurents>
 
 where <WPSInstance> should be the url to a WPS Server and <ServiceName> should 
 be the service name you want to run tests with, <RequestTypes> the types of 
@@ -26,9 +26,10 @@ if [ -z "$1" ] || [ -z "$2" ]; then
 fi
 
 WPSInstance=$1
-ServiceName=$2
-NBRequests=$4
-NBConcurrents=$5
+Version=$2
+ServiceName=$3
+NBRequests=$5
+NBConcurrents=$6
 WFSURL=${GEOSERVER}
 
 iter=0
@@ -64,12 +65,16 @@ function kvpRequest {
 	else
 	    echo " <li class='v'> Valid response code ($RESP) </li>"
 	fi
-	xmllint --noout --schema http://schemas.opengis.net/ows/1.1.0/${3}.xsd "$2" 2> ../tmp/res${iter}.txt
+	SCHEMA=http://schemas.opengis.net/ows/1.1.0/${3}.xsd
+	if [ "$Version" == "2.0" ]; then
+	    SCHEMA=http://schemas.opengis.net/ows/2.0/${3}.xsd
+	fi
+	xmllint --noout --schema $SCHEMA "$2" 2> ../tmp/res${iter}.txt
 	isValid="$(cat ../tmp/res${iter}.txt | grep -v error | grep validates)"
 	if [ "$isValid" != "" ] ; then
 		echo "<li class='v'>"
 		f="$( cat ../tmp/res${iter}.txt | awk {'print $1'})"
-		echo "<a href='$f' target='_blank'>${3} response</a> validates against <a href='http://schemas.opengis.net/ows/1.1.0/${3}.xsd'  target='_blank'>${3}.xsd</a>"
+		echo "<a href='$f' target='_blank'>${3} response</a> validates against <a href='$SCHEMA'  target='_blank'>${3}.xsd</a>"
 	else
 		echo "<li class='inv'>"
 		cat ../tmp/res${iter}.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's:\n:<br />:g' > ../tmp/res${iter}11.html
@@ -86,12 +91,16 @@ function kvpRequest {
 	else
 	    echo " <li class='inv'> Invalid response code ($RESP) </li>"
 	fi
-	xmllint --noout --schema http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd "$2" 2> ../tmp/res${iter}.txt
+	SCHEMA=http://schemas.opengis.net/wps/${Version}/wps${3}_response.xsd
+	if [ "$Version" == "2.0" ]; then
+	    SCHEMA=http://schemas.opengis.net/wps/${Version}/wps${3}.xsd
+	fi
+	xmllint --noout --schema ${SCHEMA} "$2" 2> ../tmp/res${iter}.txt
 	isValid="$(cat ../tmp/res${iter}.txt | grep validates)"
 	if [ "$isValid" != "" ] ; then
 		echo "<li class='v'>"
 		f="$( cat ../tmp/res${iter}.txt | awk {'print $1'})"
-		echo "<a href='$f' target='_blank'>${3} response</a> validates against  <a href='http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd' target='_blank'>${3}_response.xsd</a>"
+		echo "<a href='$f' target='_blank'>${3} response</a> validates against  <a href='${SCHEMA}' target='_blank'>${3}_response.xsd</a>"
 	else
 		cat ../tmp/res${iter}.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's:\n:<br />:g' > ../tmp/res${iter}2.html
 		echo "<li class='inv'> <a href='$2' target='_blank'>${3} response</a> did not validates see <a href='../tmp/res${iter}2.html' target='_blank'>ref</a>."
@@ -116,12 +125,18 @@ function kvpRequest {
 function postRequest {
     echo " <h2> ${3} POST request </h2>"
     echo " <ul>"
-    xmllint --noout --schema http://schemas.opengis.net/wps/1.0.0/wps${3}_request.xsd "$4" 2> ../tmp/res${iter}.txt
+    SCHEMA_REQ=http://schemas.opengis.net/wps/${Version}/wps${3}_request.xsd
+    SCHEMA_RESP=http://schemas.opengis.net/wps/${Version}/wps${3}_response.xsd
+    if [ "$Version" == "2.0" ]; then
+	SCHEMA_REQ=http://schemas.opengis.net/wps/${Version}/wps${3}.xsd
+	SCHEMA_RESP=http://schemas.opengis.net/wps/${Version}/wps${3}.xsd
+    fi
+    xmllint --noout --schema $SCHEMA_REQ "$4" 2> ../tmp/res${iter}.txt
     isValid="$(cat ../tmp/res${iter}.txt | grep -v error | grep validates)"
     if [ "$isValid" != "" ] ; then
 	echo "<li class='v'>"
 	f="$( cat ../tmp/res${iter}.txt | awk {'print $1'})"
-	echo "<a href='$f' target='_blank'>${3} request</a> validates against <a href='http://schemas.opengis.net/wps/1.0.0/wps${3}_request.xsd' target='_blank'>wps${3}_request.xsd</a>"
+	echo "<a href='$f' target='_blank'>${3} request</a> validates against <a href='$SCHEMA_REQ' target='_blank'>wps${3}_request.xsd</a>"
     else
 	echo "<li class='inv'>"
 	cat ../tmp/res${iter}.txt |sed -e ':a' -e 'N' -e '$!ba' -e 's:\n:<br />:g' > tmp ../tmp/res${iter}.html
@@ -135,12 +150,12 @@ function postRequest {
 	else
 	    echo " <li class='inv'> Invalid response code ($RESP) </li>"
 	fi
-    xmllint --noout --schema http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd "$2" 2> ../tmp/res${iter}1.txt
+    xmllint --noout --schema $SCHEMA_RESP "$2" 2> ../tmp/res${iter}1.txt
     isValid="$(cat ../tmp/res${iter}1.txt | grep -v error | grep validates)"
     if [ "$isValid" != "" ] ; then
 	echo "<li class='v'>"
 	f="$( cat ../tmp/res${iter}1.txt | awk {'print $1'})"
-	echo "<a href='$f' target='_blank'>${3} response</a> validates against <a href='http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd' target='_blank'>${3} response Schema</a>"
+	echo "<a href='$f' target='_blank'>${3} response</a> validates against <a href='$SCHEMA_RESP' target='_blank'>${3} response Schema</a>"
     else
 	echo "<li class='inv'>"
 	cat ../tmp/res${iter}1.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's:\n:<br />:g' > ../tmp/res${iter}1.html
@@ -153,12 +168,12 @@ function postRequest {
 	tmp=$(echo $2 | sed "s:.xml:2.xml:g")
 	file="$(xsltproc ../xsl/extractStatusLocation.xsl $2)"
 	curl -v -o "$tmp" "$file" 2> ../tmp/temp.log
-	xmllint --noout --schema http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd "$tmp" 2> ../tmp/res${iter}2.txt 
+	xmllint --noout --schema $SCHEMA_RESP "$tmp" 2> ../tmp/res${iter}2.txt 
 	isValid="$(cat ../tmp/res${iter}2.txt | grep -v error | grep validates)"
 	if [ "$isValid" != "" ] ; then
 		echo "<li class='v'>"
 		f="$( cat ../tmp/res${iter}.txt | awk {'print $1'})"
-		echo "<a href='$tmp' target='_blank'>statusLocation</a> validates against <a href='http://schemas.opengis.net/wps/1.0.0/wps${3}_response.xsd' target='_blank'>wps${3}_response.xsd Schema</a> (final result is <a href='$file' target='_blank'>here</a>)."
+		echo "<a href='$tmp' target='_blank'>statusLocation</a> validates against <a href='$SCHEMA_RESP' target='_blank'>wps${3}_response.xsd Schema</a> (final result is <a href='$file' target='_blank'>here</a>)."
 	else
 		echo "<li class='inv'>"
 		cat ../tmp/res${iter}2.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's:\n:<br />:g' > ../tmp/res${iter}2.html
@@ -228,7 +243,7 @@ function kvpWrongRequestWrite {
 
 
 
-for i in $3; do
+for i in $4; do
 #echo $i
 	if [ "$i" == "GetCapabilities" ]; then
 #
@@ -245,7 +260,11 @@ echo "<section>"
 kvpRequest "${WPSInstance}?$suffix" "../tmp/outputGC2.xml" "GetCapabilities"
 echo "</section>"
 
-curl -o ../tmp/10_wpsGetCapabilities_request.xml http://schemas.opengis.net/wps/1.0.0/examples/10_wpsGetCapabilities_request.xml
+if [ "$Version" == "2.0" ]; then
+    curl -o ../tmp/10_wpsGetCapabilities_request.xml http://schemas.opengis.net/wps/2.0/xml-examples/wpsGetCapabilitiesRequestExample.xml
+else
+    curl -o ../tmp/10_wpsGetCapabilities_request.xml http://schemas.opengis.net/wps/1.0.0/examples/10_wpsGetCapabilities_request.xml
+fi
 cat ../tmp/10_wpsGetCapabilities_request.xml | sed "s:en-CA:en-US:g" > ../tmp/10_wpsGetCapabilities_request1.xml
 echo "<section>"
 postRequest "${WPSInstance}" "../tmp/outputGCp.xml" "GetCapabilities" "../tmp/10_wpsGetCapabilities_request1.xml"
@@ -278,8 +297,13 @@ iter=7
 #
 # Tests for DescribeProcess using KVP and POST requests
 #
+LVERSION="1.0.0"
+if [ "$Version" == "2.0" ]; then
+    LVERSION="2.0.0"
+fi
+
 echo "<section>"
-kvpRequest "${WPSInstance}?request=DescribeProcess&service=WPS&version=1.0.0&Identifier=ALL" "../tmp/outputDPall.xml" "DescribeProcess"
+kvpRequest "${WPSInstance}?request=DescribeProcess&service=WPS&version=${LVERSION}&Identifier=ALL" "../tmp/outputDPall.xml" "DescribeProcess"
 echo "</section>"
 
 
@@ -287,7 +311,7 @@ Services=${ServiceName}
 ii=0
 for kk in $Services; do
 ServiceName=$kk
-params='"request=DescribeProcess" "service=WPS" "version=1.0.0" "Identifier='${ServiceName}'"'
+params='"request=DescribeProcess" "service=WPS" "version='${LVERSION}'" "Identifier='${ServiceName}'"'
 suffix=$(kvpRequestWrite -1 "$params")
 echo "<section>"
 kvpRequest "${WPSInstance}?$suffix" "../tmp/outputDPb${ii}1.xml" "DescribeProcess"
