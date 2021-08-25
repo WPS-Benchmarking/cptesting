@@ -4,13 +4,13 @@
 <wps:Input>
 <ows:Identifier>InputName1</ows:Identifier>
 <wps:Data>
-<wps:ComplexData mimeType="application/json">{"type": "FeatureCollection","features": [{ "type": "Feature", "properties": { "fid": "F0"}, "geometry": {"type":"Polygon","coordinates":[[[-102.036758,36.988972],[-106.860657,36.989491],[-109.047821,36.996643],[-109.055199,38.24493],[-109.052864,39.518196],[-109.050591,40.210545],[-109.047638,40.998474],[-107.918037,41.00341],[-104.051201,41.003227],[-102.620789,41.000225],[-102.047279,40.998077],[-102.04557,40.697323],[-102.036758,36.988972]]]} } ]}</wps:ComplexData>
+<wps:ComplexData mimeType="application/json"><![CDATA[{"type": "FeatureCollection","features": [{ "type": "Feature", "properties": { "fid": "F0"}, "geometry": {"type":"Polygon","coordinates":[[[-102.036758,36.988972],[-106.860657,36.989491],[-109.047821,36.996643],[-109.055199,38.24493],[-109.052864,39.518196],[-109.050591,40.210545],[-109.047638,40.998474],[-107.918037,41.00341],[-104.051201,41.003227],[-102.620789,41.000225],[-102.047279,40.998077],[-102.04557,40.697323],[-102.036758,36.988972]]]} } ]}]]></wps:ComplexData>
 </wps:Data>
 </wps:Input>
 <wps:Input>
 <ows:Identifier>InputName2</ows:Identifier>
 <wps:Data>
-<wps:ComplexData mimeType="application/json">{"type": "FeatureCollection","features": [{ "type": "Feature", "properties": { "fid": "F0"}, "geometry": {"type":"Polygon","coordinates":[[[-102.036758,36.988972],[-106.860657,36.989491],[-109.047821,36.996643],[-109.055199,38.24493],[-109.052864,39.518196],[-109.050591,40.210545],[-109.047638,40.998474],[-107.918037,41.00341],[-104.051201,41.003227],[-102.620789,41.000225],[-102.047279,40.998077],[-102.04557,40.697323],[-102.036758,36.988972]]]} } ]}</wps:ComplexData>
+<wps:ComplexData mimeType="application/json"><![CDATA[{"type": "FeatureCollection","features": [{ "type": "Feature", "properties": { "fid": "F0"}, "geometry": {"type":"Polygon","coordinates":[[[-102.036758,36.988972],[-106.860657,36.989491],[-109.047821,36.996643],[-109.055199,38.24493],[-109.052864,39.518196],[-109.050591,40.210545],[-109.047638,40.998474],[-107.918037,41.00341],[-104.051201,41.003227],[-102.620789,41.000225],[-102.047279,40.998077],[-102.04557,40.697323],[-102.036758,36.988972]]]} } ]}]]></wps:ComplexData>
 </wps:Data>
 </wps:Input>
 </wps:DataInputs>
